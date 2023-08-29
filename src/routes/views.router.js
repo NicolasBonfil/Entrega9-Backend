@@ -1,10 +1,7 @@
 import { Router } from "express"
-import messagesManager from "../dao/dbManagers/messages.js"
-import cartsManager from "../dao/dbManagers/carts.js"
+import messagesController from "../controllers/messages.controller.js"
+import cartsController from "../controllers/carts.controller.js"
 import productsModel from "../dao/models/products.js"
-
-const manejadorMensajes = new messagesManager()
-const manejadorCarrito = new cartsManager()
 
 const router = Router()
 
@@ -13,7 +10,7 @@ router.get("/", (req, res) => {
 })
 
 router.get("/messages", async (req, res) => {
-    let messages = await manejadorMensajes.getAllMessages()
+    let messages = await messagesController.getAllMessages()
     res.render("chat", {messages})
 })
 
@@ -39,7 +36,7 @@ router.get("/logout", (req, res) => {
 
 router.get("/carts/:cid", async (req, res) => {
     const cid = req.params.cid
-    const products = await manejadorCarrito.getProducts(cid)
+    const products = await cartsController.getProducts(cid)
     res.render("carts", {products})
 })
 

@@ -1,23 +1,15 @@
 import { Router } from "express"
-import socketServer from "../apps.js"
-import messagesManager from "../dao/dbManagers/messages.js"
+import messageController from "../controllers/messages.controller.js"
 
-const manejadorMensajes = new messagesManager()
-
-const router = Router()
-
-router.post("/", async (req, res) => {
-    const {user, message} = req.body
-
-    try {
-        const newMessage = await manejadorMensajes.saveMessages(user, message)
-        socketServer.emit("newMessage", newMessage)
-        res.status(200).send(({status: "success", payload: newMessage}))
-        
-    } catch {
-        if(!user || !message) return res.status(400).send({status: "error", error: "Faltan datos"})
+class MessageRouter{
+    constructor(){
+        this.InicioMessage = Router()
+        this.InicioMessage.post("/", messageController.saveMessages)
     }
 
-})
+    getRouter(){
+        return this.InicioMessage
+    }
+}
 
-export default router
+export default new MessageRouter()

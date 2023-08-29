@@ -16,14 +16,15 @@ import messagesRouter from "./routes/messages.router.js"
 import initializePassport from "./config/passport.config.js"
 import passport from "passport"
 import cookieParser from "cookie-parser"
-
-
+import CONFIG from "./config/config.js"
 
 const app = express()
 
 mongoose.set("strictQuery", false)
 
-const connection = mongoose.connect("mongodb+srv://bonfilnico:12345@pruebacoder.q69nl8a.mongodb.net/?retryWrites=true&w=majority",{
+const {PORT, MONGO_URL} = CONFIG
+
+const connection = mongoose.connect(MONGO_URL,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     dbName: "ecommerce"
@@ -35,7 +36,7 @@ app.use(express.static(__dirname + "/public"))
 
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://bonfilnico:12345@pruebacoder.q69nl8a.mongodb.net/?retryWrites=true&w=majority",
+        mongoUrl: MONGO_URL,
         mongoOptions: {useNewUrlParser: true, useUnifiedTopology: true},
         ttl:3600
     }),
@@ -49,9 +50,9 @@ app.set("views", __dirname + "/views")
 app.set("view engine", "handlebars")
 
 app.use(cookieParser())
-app.use("/api/products", productsRouter)
-app.use("/api/carts", cartsRouter)
-app.use("/api/messages", messagesRouter)
+app.use("/api/products", productsRouter.getRouter())
+app.use("/api/carts", cartsRouter.getRouter())
+app.use("/api/messages", messagesRouter.getRouter())
 app.use("/", viewRouter)
 app.use("/api/session", sessionRouter)
 
@@ -62,7 +63,7 @@ app.use(session({
 }))
 
 
-const httpserver = app.listen(8080, () => console.log("Server arriba"))
+const httpserver = app.listen(PORT, () => console.log("Server arriba"))
 const socketServer = new Server(httpserver)
 
 socketServer.on("connection", socket => {

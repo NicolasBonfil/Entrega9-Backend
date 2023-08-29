@@ -1,11 +1,12 @@
 import passport from "passport"
 import passportJwt from "passport-jwt"
 import {cookieExtractor} from "../utils.js"
+import CONFIG from "../config/config.js"
 
 const JwtStrategy = passportJwt.Strategy
 const ExtractJwt = passportJwt.ExtractJwt
 
-const SECRET_KEY = "c0d3rs3cr3t"
+const {SECRET_KEY} = CONFIG
 
 passport.use(new JwtStrategy(
     {

@@ -1,5 +1,3 @@
-// import { SECRET_KEY } from '../constants/constants';
-const SECRET_KEY = "c0d3rs3cr3t"
 const auth = (role) => {
 	return async(req, res, next) => {
 		if(!req.user){

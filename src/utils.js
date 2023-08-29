@@ -2,8 +2,9 @@ import {fileURLToPath} from 'url';
 import { dirname } from 'path';
 import bcrypt, { genSaltSync } from "bcrypt"
 import jwt from "jsonwebtoken"
+import CONFIG from './config/config.js';
 
-const SECRET_KEY = "c0d3rs3cr3t"
+const {SECRET_KEY} = CONFIG
 
 export const createHash = password => bcrypt.hashSync(password, genSaltSync(10))
 
